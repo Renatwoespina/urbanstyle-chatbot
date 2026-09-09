@@ -1,0 +1,51 @@
+GUÍA DE TALLAS - URBANSTYLE CHILE
+
+HOMBRES - REMERAS Y POLAS
+Talla | Pecho (cm) | Cintura (cm) | Largo (cm)
+S     | 86-91      | 71-76        | 68
+M     | 91-96      | 76-81        | 70
+L     | 96-101     | 81-86        | 72
+XL    | 101-106    | 86-91        | 74
+
+HOMBRES - PANTALONES
+Talla | Cintura (cm) | Cadera (cm) | Largo (cm)
+28    | 71           | 91           | 101
+30    | 76           | 96           | 101
+32    | 81           | 101          | 101
+34    | 86           | 106          | 101
+36    | 91           | 111          | 101
+
+MUJERES - TOPS Y REMERAS
+Talla | Pecho (cm) | Cintura (cm) | Largo (cm)
+S     | 81-86      | 61-66        | 62
+M     | 86-91      | 66-71        | 64
+L     | 91-96      | 71-76        | 66
+
+MUJERES - VESTIDOS Y FALDAS
+Talla | Pecho (cm) | Cintura (cm) | Cadera (cm) | Largo (cm)
+S     | 81-86      | 61-66        | 86-91       | 90-100
+M     | 86-91      | 66-71        | 91-96       | 90-100
+L     | 91-96      | 71-76        | 96-101      | 90-100
+
+UNISEX - BUZOS Y CHAQUETAS
+Talla | Pecho (cm) | Largo (cm) | Largo Mangas (cm)
+S     | 86-91      | 68         | 81
+M     | 91-96      | 70         | 83
+L     | 96-101     | 72         | 85
+XL    | 101-106    | 74         | 87
+
+ZAPATILLAS
+EUR  | US   | CM
+36   | 4    | 23
+37   | 4.5  | 23.5
+38   | 5    | 24
+39   | 6    | 24.5
+40   | 7    | 25
+41   | 8    | 26
+42   | 9    | 27
+
+CONSEJOS PARA ELEGIR TALLA:
+- Si te encuentras entre dos tallas, elige la mayor para mayor comodidad
+- Para jeans slim fit, se recomienda talla según cintura habitual
+- Las tallas pueden variar ligeramente según el modelo
+- Consulta la ficha de producto para información específica de talla

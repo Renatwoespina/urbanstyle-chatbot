@@ -1,0 +1,31 @@
+# ============================================================
+# UrbanStyle Chatbot - archivos que NUNCA deben subirse al repo
+# ============================================================
+
+# Variables de entorno (contienen la clave API de Groq)
+.env
+.env.local
+
+# Entornos virtuales
+venv/
+.venv/
+env/
+
+# Caché de Python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.pytest_cache/
+
+# Datos generados en tiempo de ejecución
+data/citas.json
+data/tramites.json
+solicitudes_generadas/
+*.pkl
+*.faiss
+
+# IDE y sistema
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
