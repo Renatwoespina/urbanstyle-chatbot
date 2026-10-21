@@ -146,9 +146,167 @@
     "escenario": 3,
     "titulo": "Condición cambiante: plazo vencido (replanificación)",
     "entrada": "Soy Camila Rojas de nuevo. Compré el SKU URB-004 en tienda hace 45 días y quiero devolverlo porque no me gustó. ¿Me devuelven la plata?",
-    "error": "RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01m1dfsv9ve5drt7xbwbz13ccr` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197715, Requested 2542. Please try again in 1m51.023999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
-    "modelo": "openai/gpt-oss-20b",
-    "fecha": "2026-10-21T00:36:51"
+    "herramientas": [
+      "planificar",
+      "consultar_producto",
+      "consultar_politica",
+      "actualizar_plan",
+      "actualizar_plan",
+      "evaluar_devolucion",
+      "replanificar_plan",
+      "registrar_solicitud_devolucion",
+      "consultar_stock",
+      "actualizar_plan",
+      "actualizar_plan",
+      "actualizar_plan",
+      "actualizar_plan",
+      "guardar_en_memoria"
+    ],
+    "traza": [
+      {
+        "accion": "planificar",
+        "entrada": {
+          "contexto": "Cliente Camila Rojas, tiene caso previo DEV-20261020-001-2D16 (URB-002, aprobado). Ahora solicita devolución de URB-004.",
+          "objetivo": "Resolver solicitud de devolución de SKU URB-004 (comprado en tienda, 45 días, motivo: no me gustó)"
+        },
+        "observacion": "PLAN v1 CREADO con 5 pasos.\n1. [pendiente] Verificar la política de devoluciones vigente para compras en tienda física, específicamente el plazo máximo permitido y las condiciones para el motivo 'no me gustó'. -> consultar_politica\n2. [pendiente] Consultar el estado actual del producto URB-004 en el sistema para verificar su condición (nuevo, usado, dañado) y si está sujeto a restricciones de reventa o devolución. -> consultar_producto\n3. [pendiente] Evaluar la solicitud de devolución considerando el contexto del caso previo (DEV-20261020-001-2D16) y el cumplimiento de los requisitos de tiempo y estado del producto. -> evaluar_devolucion\n4. [pendiente] Registrar la nueva solicitud de devolución en el sistema de gestión de casos, vinculándola al cliente Camila Rojas y al SKU URB-004. -> registrar_solicitud_devolucion\n5. [pendiente] Guardar en la memoria del cliente la resolución de esta s"
+      },
+      {
+        "accion": "consultar_producto",
+        "entrada": {
+          "termino": "URB-004"
+        },
+        "observacion": "SKU: URB-004 | Producto: Chaqueta Denim Unisex | Categoría: Chaqueta\nPrecio: $44990 CLP | Stock: 30 unidades\nTallas: S/M/L/XL | Colores: Azul Claro/Azul Oscuro\nDescripción: Chaqueta de mezclilla con botones frontales. Diseño clásico unisex."
+      },
+      {
+        "accion": "consultar_politica",
+        "entrada": {
+          "tema": "plazo de devolución y condiciones"
+        },
+        "observacion": "[POLÍTICA DE CAMBIOS Y DEVOLUCIONES - politica_devoluciones]\nPOLÍTICA DE CAMBIOS Y DEVOLUCIONES - URBANSTYLE CHILE\n\nVIGENCIA: Desde el 01 de enero 2025\n\n1. PLAZO PARA CAMBIOS O DEVOLUCIONES\nEl cliente tiene un plazo máximo de 30 días corridos desde la fecha de recepción del producto para solicitar un cambio o devolución.\n\n2. CONDICIONES DEL PRODUCTO\n\n---\n\nun cambio o devolución.\n\n2. CONDICIONES DEL PRODUCTO\nPara que un cambio o devolución sea procesado, el producto debe cumplir con las siguientes condiciones:\n- Estar sin usar, sin lavar y sin alterar\n- Contener todas las etiquetas originales adheridas\n- Estar en su empaque original (caja o bolsa)\n\n---\n\ncinturones, joyería)\n\n4. PROCESO DE CAMBIO EN TIENDA\n- Acudir a cualquier tienda UrbanStyle con el producto y la boleta\n- El asesor validară las condiciones del producto\n- Si cumple condiciones, se realizará el cambio inmediato por otro pr"
+      },
+      {
+        "accion": "actualizar_plan",
+        "entrada": {
+          "estado": "completado",
+          "nota": "Plazo máximo 30 días corridos desde recepción. Producto debe estar sin usar, con etiquetas y empaque original.",
+          "paso": 1
+        },
+        "observacion": "Paso 1 -> completado. Progreso 20% (plan en_ejecucion). Siguiente pendiente: 2. Consultar el estado actual del producto URB-004 en el sistema para verificar su condición (nuevo, usado, dañado) y si está sujeto a restricciones de reventa o devolución."
+      },
+      {
+        "accion": "actualizar_plan",
+        "entrada": {
+          "estado": "completado",
+          "nota": "URB-004 = Chaqueta Denim Unisex, $44.990 CLP, categoría Chaqueta, stock 30.",
+          "paso": 2
+        },
+        "observacion": "Paso 2 -> completado. Progreso 40% (plan en_ejecucion). Siguiente pendiente: 3. Evaluar la solicitud de devolución considerando el contexto del caso previo (DEV-20261020-001-2D16) y el cumplimiento de los requisitos de tiempo y estado del producto."
+      },
+      {
+        "accion": "evaluar_devolucion",
+        "entrada": {
+          "canal": "tienda",
+          "categoria": "Chaqueta",
+          "cumple_condiciones": true,
+          "dias_desde_recepcion": 45
+        },
+        "observacion": "DECISIÓN: RECHAZADA_POR_PLAZO | NO APROBADA\nResolución: Solicitud a los 45 días; el plazo máximo es de 30 días corridos.\nFundamento: Sección 1 (Plazo para cambios o devoluciones): 30 días corridos desde la fecha de recepción.\nAcción sugerida: Buscar alternativas permitidas (contacto con soporte, beneficios Club UrbanStyle) y registrar la negativa.\nParámetros evaluados: días=45, cumple_condiciones=True, categoría=Chaqueta, canal=tienda, defectuoso=False, descuento=0.0%, stock_reemplazo=-1\n\n[SEÑAL ADAPTATIVA] REPLANIFICACION_REQUERIDA: condición cambiante 'PLAZO_VENCIDO' hace inviable el plan original. Antes de responder al cliente debes llamar a `replanificar_plan` con esta condición y ejecutar la nueva ruta."
+      },
+      {
+        "accion": "replanificar_plan",
+        "entrada": {
+          "condicion": "PLAZO_VENCIDO",
+          "contexto": "Solicitud de devolución URB-004 a 45 días, plazo máximo 30 días. Decisión: RECHAZADA_POR_PLAZO.",
+          "motivo": "El plazo de 30 días corridos venció (45 días desde recepción). No es posible aprobar la devolución. Se debe registrar la negativa y ofrecer alternativas."
+        },
+        "observacion": "PLAN REPLANIFICADO (v2). Motivo: El plazo de 30 días corridos venció (45 días desde recepción). No es posible aprobar la devolución. Se debe registrar la negativa y ofrecer alternativas.\nCondición cambiante: PLAZO_VENCIDO\nSe conservan 2 pasos completados.\n1. [completado] Verificar la política de devoluciones vigente para compras en tienda física, específicamente el plazo máximo permitido y las condiciones para el motivo 'no me gustó'. -> consultar_politica\n2. [completado] Consultar el estado actual del producto URB-004 en el sistema para verificar su condición (nuevo, usado, dañado) y si está sujeto a restricciones de reventa o devolución. -> consultar_producto\n3. [pendiente] Registrar formalmente la negativa de la solicitud de devolución del SKU URB-004 en el sistema, citando explícitamente el incumplimiento del plazo de 30 días (45 días transcurridos) como motivo de rechazo. -> registr"
+      },
+      {
+        "accion": "registrar_solicitud_devolucion",
+        "entrada": {
+          "canal": "tienda",
+          "cliente": "Camila Rojas",
+          "decision": "RECHAZADA_POR_PLAZO",
+          "dias_desde_recepcion": 45,
+          "motivo": "No me gustó",
+          "notas": "Plazo máximo 30 días corridos vencido (45 días). Sección 1 de la política. Cliente tiene caso previo DEV-20261020-001-2D16 (URB-002, aprobado).",
+          "sku": "URB-004"
+        },
+        "observacion": "SOLICITUD REGISTRADA - folio DEV-20261021-001-E6DD\n  Cliente: Camila Rojas | SKU: URB-004 | Canal: tienda\n  Días desde recepción: 45 | Decisión: RECHAZADA_POR_PLAZO\n  Monto: $0 CLP | Estado: observada\nEste folio debe entregarse al cliente como comprobante del caso."
+      },
+      {
+        "accion": "consultar_stock",
+        "entrada": {
+          "termino": "URB-004"
+        },
+        "observacion": "SKU URB-004 (Chaqueta Denim Unisex): stock total 30 unidades -> DISPONIBLE.\nTallas listadas: S/M/L/XL."
+      },
+      {
+        "accion": "actualizar_plan",
+        "entrada": {
+          "estado": "completado",
+          "nota": "Solicitud registrada con folio DEV-20261021-001-E6DD, decisión RECHAZADA_POR_PLAZO.",
+          "paso": 3
+        },
+        "observacion": "Paso 3 -> completado. Progreso 50% (plan replanificado). Siguiente pendiente: 4. Consultar el inventario y la política de cambios para verificar si el SKU URB-004 tiene stock disponible para un cambio por otro modelo o talla, dado que la devolución de dinero no es posible."
+      },
+      {
+        "accion": "actualizar_plan",
+        "entrada": {
+          "estado": "completado",
+          "nota": "URB-004 tiene stock DISPONIBLE (30 unidades, tallas S/M/L/XL).",
+          "paso": 4
+        },
+        "observacion": "Paso 4 -> completado. Progreso 66% (plan replanificado). Siguiente pendiente: 5. Evaluar si el cliente califica para alguna excepción humanitaria o promoción vigente que permita un cambio por crédito en tienda, a pesar del vencimiento del plazo de devolución de dinero."
+      },
+      {
+        "accion": "actualizar_plan",
+        "entrada": {
+          "estado": "completado",
+          "nota": "No aplica excepción: la política no contempla excepciones por plazo vencido para motivo 'no me gustó'.",
+          "paso": 5
+        },
+        "observacion": "Paso 5 -> completado. Progreso 83% (plan replanificado). Siguiente pendiente: 6. Redactar y enviar la comunicación final al cliente informando el rechazo de la devolución por plazo vencido y presentando las alternativas viables (cambio por crédito o compra nueva) si existen."
+      },
+      {
+        "accion": "actualizar_plan",
+        "entrada": {
+          "estado": "completado",
+          "nota": "Respuesta final entregada al cliente con folio y alternativas.",
+          "paso": 6
+        },
+        "observacion": "Paso 6 -> completado. Progreso 100% (plan completado). Siguiente pendiente: ninguno (plan completo)"
+      },
+      {
+        "accion": "guardar_en_memoria",
+        "entrada": {
+          "contenido": "Caso DEV-20261021-001-E6DD - cliente Camila Rojas - SKU URB-004 (Chaqueta Denim Unisex, $44.990) - motivo: No me gustó - decisión RECHAZADA_POR_PLAZO - 45 días desde recepción - canal tienda. Plazo máximo 30 días vencido.",
+          "tipo": "caso"
+        },
+        "observacion": "Recuerdo 64ba8c70 guardado en memoria de largo plazo (tipo: caso, 221 caracteres)."
+      }
+    ],
+    "respuesta": "¡Hola, Camila! Gracias por escribirnos de nuevo. 😊\n\nRevisé tu solicitud de devolución de la **Chaqueta Denim Unisex (URB-004)** y lamentablemente **no es posible procesar la devolución de dinero** en este caso.\n\n**¿Por qué?**\nSegún la **Sección 1 de nuestra Política de Cambios y Devoluciones**, el plazo máximo para solicitar un cambio o devolución es de **30 días corridos** desde la fecha de recepción. Tu compra tiene **45 días**, por lo que el plazo ya venció.\n\n**Folio de tu caso:** `DEV-20261021-001-E6DD` (queda registrado como *rechazada por plazo vencido*).\n\n**¿Qué alternativas te puedo ofrecer?**\n\n- **Cambio por otro producto:** Si la chaqueta está sin usar, con etiquetas y en su empaque original, puedes acercarte a cualquier tienda UrbanStyle con la boleta para evaluar un cambio por otro artículo de igual o mayor valor (pagando la diferencia). Esto es una cortesía de la tienda y no está garantizado por la política, pero nuestro asesor puede ayudarte.\n- **Club UrbanStyle:** Si aún no eres parte, al registrarte obtienes beneficios como descuentos en próximas compras.\n- **Soporte:** Si crees que hay alguna circunstancia especial, puedes escribir a **soporte@urbanstyle.cl** o llamar al **600-URBAN-STYLE** para que revisen tu caso de forma individual.\n\nSé que no es la respuesta que esperabas, y lamento el inconveniente. ¿Hay algo más en lo que pueda ayudarte? 🙌",
+    "plan": {
+      "activo": true,
+      "version": 2,
+      "progreso": 100,
+      "estado_general": "completado",
+      "pasos": 6,
+      "replanificaciones": 1
+    },
+    "memoria": {
+      "turnos_corto_plazo": 2,
+      "ventana": 8,
+      "resumen_activo": false,
+      "recuerdos_largo_plazo": 4,
+      "por_tipo": {
+        "caso": 4
+      }
+    },
+    "modelo": "qwen/qwen3.8-27b",
+    "fecha": "2026-10-21T01:09:49"
   },
   {
     "escenario": 4,

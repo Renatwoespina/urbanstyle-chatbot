@@ -36,12 +36,16 @@ MENSAJES_DE_CORTE = {
 
 def crear_llm(model: str | None = None, temperatura: float | None = None) -> ChatGroq:
     config.cargar_entorno()
+    nombre = model or config.MODEL
+    # reasoning_effort sólo existe en la familia GPT-OSS; otros modelos de Groq
+    # rechazan la parámetro con 400.
+    model_kwargs = {"reasoning_effort": config.REASONING_EFFORT} if nombre.startswith("openai/gpt-oss") else {}
     return ChatGroq(
-        model=model or config.MODEL,
+        model=nombre,
         temperature=config.TEMPERATURE if temperatura is None else temperatura,
         max_tokens=config.MAX_TOKENS,
         max_retries=config.MAX_REINTENTOS_LLM,
-        model_kwargs={"reasoning_effort": config.REASONING_EFFORT},
+        model_kwargs=model_kwargs,
     )
 
 

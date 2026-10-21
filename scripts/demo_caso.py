@@ -225,10 +225,11 @@ def main() -> None:
         texto.append("")
 
     ruta_txt = config.DOCS_DIR / "evidencia_pruebas.txt"
+    modelos = sorted({e.get("modelo", "n/d") for e in evidencias})
     with open(ruta_txt, "w", encoding="utf-8") as fh:
         fh.write("EVIDENCIA DE EJECUCIÓN - AGENTE URBANSTYLE 2.0\n")
         fh.write(f"Generado: {datetime.now().isoformat(timespec='seconds')}\n")
-        fh.write(f"Modelo (corredor): {config.MODEL}\n\n")
+        fh.write(f"Modelos usados: {', '.join(modelos)}\n\n")
         fh.write("\n".join(texto))
 
     ruta_json = config.DOCS_DIR / "evidencia_demo.json"
