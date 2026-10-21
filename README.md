@@ -177,6 +177,10 @@ urbanstyle-chatbot/
 ├── data/                     # corpus (catalogo_productos.csv, faq.txt, politica_devoluciones.txt,
 │                             # guia_tallas.txt) + JSON generados en ejecución
 ├── docs/                     # diagramas PNG, informe Word y evidencia de pruebas
+│   ├── bocetos.md            # bocetos de diseño previos a la implementación
+│   ├── informe_tecnico.md    # borrador técnico extendido
+│   ├── evidencia_pruebas.txt # traza de los 5 escenarios de la demo
+│   └── Informe_EP2_UrbanStyle.docx
 ├── scripts/
 │   ├── demo_caso.py          # 5 escenarios con traza, plan y memoria
 │   ├── generar_diagramas.py  # figuras del informe
