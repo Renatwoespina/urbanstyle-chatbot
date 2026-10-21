@@ -57,7 +57,12 @@ def load_catalog() -> list[Document]:
 
 
 def split_documents(docs: list[Document], chunk_size: int = 1000, chunk_overlap: int = 200) -> list[Document]:
-    """Divide documentos largos en fragmentos. Simple y sin dependencias."""
+    """Divide documentos largos en fragmentos respetando límites de párrafo u oración.
+
+    Se busca el último salto de línea (o punto) dentro de la ventana para no
+    cortar palabras ni secciones por la mitad, lo que mejora la legibilidad de
+    la evidencia que recibe el LLM.
+    """
     chunks = []
     for doc in docs:
         content = doc.page_content
@@ -66,18 +71,36 @@ def split_documents(docs: list[Document], chunk_size: int = 1000, chunk_overlap:
             continue
         start = 0
         while start < len(content):
-            end = start + chunk_size
-            chunks.append(Document(content[start:end], doc.metadata))
+            end = min(start + chunk_size, len(content))
+            if end < len(content):
+                ventana = content[start : end]
+                corte = max(ventana.rfind("\n"), ventana.rfind(". "))
+                if corte > chunk_size // 2:
+                    end = start + corte + 1
+            fragmento = content[start:end].strip()
+            if fragmento:
+                chunks.append(Document(fragmento, doc.metadata))
             if end >= len(content):
                 break
-            start = end - chunk_overlap
+            start = max(end - chunk_overlap, start + 1)
+            # Evita que el siguiente fragmento comience en medio de una palabra.
+            if start > 0 and content[start - 1] not in " \n":
+                espacio = content.find(" ", start)
+                if 0 <= espacio - start <= 40:
+                    start = espacio + 1
     return chunks
 
 
-def load_all_documents() -> list[Document]:
+def load_all_documents(chunk_size: int = 300, chunk_overlap: int = 60) -> list[Document]:
+    """Corpus unificado.
+
+    Los documentos largos se fragmentan en trozos de 300 caracteres: con trozos
+    menores la similitud TF-IDF no se diluye y el retriever prioriza el pasaje
+    exacto (mejora medida sobre consultas de tallas y devoluciones).
+    """
     all_docs = []
     all_docs.extend(load_catalog())
-    all_docs.extend(split_documents(load_faq()))
-    all_docs.extend(split_documents(load_policies()))
-    all_docs.extend(split_documents(load_size_guide()))
+    all_docs.extend(split_documents(load_faq(), chunk_size=chunk_size, chunk_overlap=chunk_overlap))
+    all_docs.extend(split_documents(load_policies(), chunk_size=chunk_size, chunk_overlap=chunk_overlap))
+    all_docs.extend(split_documents(load_size_guide(), chunk_size=chunk_size, chunk_overlap=chunk_overlap))
     return all_docs

@@ -1,31 +1,107 @@
-import src.rag_pipeline
-from src.prompts import FALLBACK_RESPONSE
+"""Interfaz de línea de comandos del agente UrbanStyle 2.0.
 
-def main():
-    print("=" * 60)
-    print("  URBANSTYLE CHILE - Chatbot de Atención al Cliente")
-    print("  Escribe 'salir' para terminar la conversación")
-    print("=" * 60)
-    print("\nInicializando pipeline RAG...")
-    chain = src.rag_pipeline.create_rag_chain()
-    print("Listo. Puedes hacer tu consulta.\n")
+Uso:
+    python -m src.chatbot
+
+Comandos durante la conversación:
+    /ayuda     muestra la ayuda
+    /plan      estado del plan activo
+    /memoria   estado de la memoria (corto y largo plazo)
+    /estado    herramientas, modelo y contadores
+    /reset     reinicia la sesión (vacia memoria de corto plazo)
+    salir      termina
+"""
+
+from __future__ import annotations
+
+import sys
+
+from src.agente import construir_agente
+
+BANNER = """============================================================
+  URBANSTYLE CHILE - Agente de Atención al Cliente 2.0
+  Herramientas: consulta | escritura | razonamiento
+  Memoria: corto plazo + largo plazo + recuperación semántica
+  Escribe /ayuda para ver los comandos, 'salir' para terminar
+============================================================"""
+
+AYUDA = """Comandos:
+  /ayuda    esta ayuda
+  /plan     muestra el plan activo y su progreso
+  /memoria  muestra el estado de la memoria
+  /estado   configuración del agente
+  /reset    reinicia la sesión (mantiene memoria de largo plazo)
+  salir     termina la conversación
+
+Ejemplos de casos:
+  - ¿Cuánto cuesta la polera básica clásica?
+  - Compré online el SKU URB-002 hace 12 días y me quedó grande, quiero cambiarlo
+  - Compré el SKU URB-004 hace 45 días y quiero devolverlo
+  - Llegó un producto defectuoso hace 60 días, ¿qué hago?"""
+
+
+def _configurar_salida() -> None:
+    for flujo in (sys.stdout, sys.stderr):
+        try:
+            flujo.reconfigure(encoding="utf-8")
+        except Exception:
+            pass
+
+
+def main() -> None:
+    _configurar_salida()
+    print(BANNER)
+    print("\nInicializando agente (retriever + memoria + planificador)...")
+    agente = construir_agente()
+    print("Listo. Puedes escribir tu consulta.\n")
 
     while True:
-        user_input = input("Tú: ").strip()
-        if not user_input:
-            continue
-        if user_input.lower() in ("salir", "exit", "quit"):
+        try:
+            entrada = input("Tú: ").strip()
+        except (EOFError, KeyboardInterrupt):
             print("\nGracias por contactar UrbanStyle. ¡Hasta pronto!")
             break
 
+        if not entrada:
+            continue
+        if entrada.lower() in ("salir", "exit", "quit"):
+            print("\nGracias por contactar UrbanStyle. ¡Hasta pronto!")
+            break
+        if entrada.lower() in ("/ayuda", "ayuda", "help"):
+            print(AYUDA + "\n")
+            continue
+        if entrada.lower() == "/plan":
+            print("\n" + agente.planificador.consultar() + "\n")
+            continue
+        if entrada.lower() == "/memoria":
+            estado = agente.memoria.estado()
+            print(f"\nMemoria: {estado}\n")
+            print(agente.memoria.largo.resumen_memoria() + "\n")
+            continue
+        if entrada.lower() == "/estado":
+            print(f"\n{agente.estado()}\n")
+            continue
+        if entrada.lower() == "/reset":
+            print("\n" + agente.reiniciar_sesion() + "\n")
+            continue
+
         try:
-            result = src.rag_pipeline.query(chain, user_input)
-            print(f"\nUrbanBot: {result['answer']}")
-            if result["sources"]:
-                print(f"  [Fuentes: {', '.join(result['sources'])}]")
-        except Exception as e:
-            print(f"\nUrbanBot: {FALLBACK_RESPONSE}")
-            print(f"  [Error técnico: {e}]")
+            resultado = agente.preguntar(entrada)
+        except Exception as exc:
+            print(f"\nUrbanBot: No pude completar la consulta por un problema técnico ({exc}).")
+            print("Puedes contactar a soporte@urbanstyle.cl o al 600-URBAN-STYLE.\n")
+            continue
+
+        print(f"\nUrbanBot: {resultado['respuesta']}\n")
+        usadas = resultado.get("herramientas_usadas", [])
+        if usadas:
+            print(f"  [herramientas: {', '.join(usadas)}]")
+        plan = resultado.get("plan", {})
+        if plan.get("activo"):
+            print(
+                f"  [plan v{plan['version']} · {plan['progreso']}% · "
+                f"replanificaciones: {plan['replanificaciones']}]"
+            )
         print()
 
 

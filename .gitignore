@@ -1,4 +1,4 @@
-# ============================================================
+﻿# ============================================================
 # UrbanStyle Chatbot - archivos que NUNCA deben subirse al repo
 # ============================================================
 
@@ -18,9 +18,9 @@ __pycache__/
 .pytest_cache/
 
 # Datos generados en tiempo de ejecución
-data/citas.json
-data/tramites.json
-solicitudes_generadas/
+data/memoria.json
+data/solicitudes.json
+data/plan_actual.json
 *.pkl
 *.faiss
 

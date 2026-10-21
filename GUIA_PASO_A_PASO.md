@@ -205,8 +205,9 @@ Desde la carpeta del proyecto:
 python -m pytest tests -v
 ```
 
-Deberías ver los 4 tests aprobados (carga de catálogo, FAQ, documentos y
-fragmentación).
+Deberías ver: **65 pruebas aprobadas** (memoria, herramientas, planificador,
+orquestación, recuperación y pipeline). No consumen cuota de Groq porque usan un
+modelo simulado.
 
 ---
 
@@ -229,18 +230,58 @@ Deberías ver:
   Escribe 'salir' para terminar la conversación
 ============================================================
 Inicializando pipeline RAG...
-[INFO] Documentos indexados: 24 chunks (retriever TF-IDF local)
+[INFO] Documentos indexados: 48 chunks (retriever TF-IDF local)
 Listo. Puedes hacer tu consulta.
 ```
 
 Prueba escribir:
 - "¿Cuánto cuesta la polera básica clásica?"
-- "¿Cuáles son los horarios?"
-- "¿Puedo devolver un producto?"
-- "¿Qué tallas tiene el jean slim?"
-- "¿Cuáles son los métodos de pago?"
+- "¿Quiero devolver el SKU URB-002 que compré hace 12 días"
+- "Recibí el SKU URB-005 hace 60 días y tiene un defecto de fabricación"
+- "¿Recuerdas el caso que abrí la vez pasada?"
+
+Comandos disponibles dentro del chatbot: `/plan`, `/memoria`, `/estado`,
+`/reset`, `/ayuda` y `salir`.
 
 Para salir escribe: `salir`
+
+---
+
+## PASO 9: DEMO CON EVIDENCIA (Evaluación Parcial 2)
+
+Ejecuta los 5 escenarios del caso organizacional y genera la evidencia en
+`docs/evidencia_pruebas.txt` y `docs/evidencia_demo.json`:
+
+```
+python -m scripts.demo_caso --limpio
+```
+
+Variantes útiles:
+
+```
+python -m scripts.demo_caso -e 2        # sólo un escenario (defensa en vivo)
+python -m scripts.demo_caso -e 1,2      # un rango de escenarios
+python -m scripts.demo_caso --limpio --acumular   # conserva evidencia previa
+python -m scripts.demo_caso --sin-supervision      # sin reflexión del supervisor
+```
+
+Si la cuota diaria de Groq se agota a mitad de la corrida, vuelve a lanzar el
+mismo comando **sin `--limpio`** y con `--acumular`, indicando sólo los
+escenarios que faltan (p. ej. `python -m scripts.demo_caso -e 3,4,5 --acumular`):
+se conserva la evidencia previa y el estado de los escenarios que ya salieron
+bien (memoria y folios), que es lo que necesita el escenario 5.
+
+---
+
+## PASO 10: REGENERAR LOS ENTREGABLES DE EP2
+
+```
+python -m scripts.generar_diagramas   # docs/diagrama_*.png
+python -m scripts.generar_informe     # docs/Informe_EP2_UrbanStyle.docx
+```
+
+Antes de la defensa, revisa que el informe tenga **máximo 5 páginas** y completa
+la sección **6.1 Reflexiones individuales** (se redactan a mano, sin IA).
 
 ---
 
@@ -268,6 +309,13 @@ del proyecto.
 ejecutado `pip install -r requirements.txt`.
 
 ### Error: modelo no disponible
-**Solución:** El proyecto usa por defecto `openai/gpt-oss-120b`, disponible en
-Groq. Si tu cuenta no lo muestra, cambia la variable `MODEL` en
-`src/rag_pipeline.py` por otro disponible (por ejemplo `qwen/qwen3.8-27b`).
+**Solución:** El proyecto usa por defecto `openai/gpt-oss-120b`. Cambia la
+variable `URBAN_MODEL` en el archivo `.env` por otro modelo disponible en tu
+cuenta (por ejemplo `openai/gpt-oss-20b`) y vuelve a ejecutar.
+
+### Error: "Rate limit reached ... (TPD)"
+**Solución:** Es la cuota diaria gratuita de Groq (200 000 tokens por modelo).
+Espera el tiempo que indica el propio mensaje y vuelve a intentar; si estabas
+corriendo la demo, repítela con `--acumular` para no rehacer los escenarios que
+ya salieron bien. También puedes cambiar `URBAN_MODEL` en `.env` a otro modelo:
+la orquestación no cambia.

@@ -1,3 +1,19 @@
+# Dependencias del agente UrbanStyle 2.0
+
+# LLM y orquestación de agentes
+langchain==0.2.14
+langchain-core==0.2.43
+langchain-groq==0.1.10
 groq==0.37.1
-python-dotenv==1.0.1
+
+# Recuperación (RAG) y memoria semántica
 scikit-learn==1.9.0
+numpy>=1.26
+
+# Configuración
+python-dotenv==1.0.1
+
+# Pruebas y generación del informe
+pytest>=8.0
+python-docx>=1.1
+matplotlib>=3.8
