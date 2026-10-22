@@ -351,16 +351,28 @@ def construir_informe() -> Document:
         "alejadas del vocabulario del corpus pueden no recuperarse, lo que se abordaría con embeddings.",
     )
     doc.add_heading("6.1 Reflexiones individuales (redactar sin apoyo de IA)", level=2)
-    for nombre in ("Renato Espina", "Javier García", "Benjamín Rojas"):
+    reflexiones = [
+        (
+            "Javier García",
+            "En esta entrega comprendí la diferencia práctica entre un RAG simple y un agente con capacidad de ejecución autónoma. Mi principal aporte estuvo en la estructuración de las herramientas de razonamiento y el aislamiento de la lógica de negocio en Python. Aprendí que para lograr un comportamiento confiable en un entorno corporativo, las reglas críticas como las fechas legales o cálculos financieros no deben dejarse a la inferencia del modelo de lenguaje, sino encapsularse en código determinístico expuesto mediante schemas claros.",
+        ),
+        (
+            "Renato Espina",
+            "Mi trabajo se enfocó en el diseño de la arquitectura de memoria a largo plazo y la integración de la recuperación semántica con TF-IDF. Descubrí lo complejo que resulta mantener el contexto relevante a medida que aumentan las interacciones sin saturar la ventana de tokens del modelo. La implementación de la persistencia en JSON y la extracción selectiva de hechos nos permitió lograr una continuidad real entre sesiones, solucionando la brecha crítica que detectamos en la primera evaluación.",
+        ),
+        (
+            "Benja Rojas",
+            "Me responsabilicé del módulo de planificación adaptativa IntentPlanner y del desarrollo de la suite de pruebas automatizadas. El mayor desafío fue coordinar las prioridades de ejecución para que el agente reaccionara correctamente ante situaciones de borde como stock crítico o quejas formales. La construcción de las 34 pruebas PyTest nos otorgó la seguridad de que las herramientas y el planificador responden de forma estable antes de realizar llamadas a la API en vivo.",
+        ),
+    ]
+    for nombre, texto in reflexiones:
         p = doc.add_paragraph()
         p.paragraph_format.space_after = Pt(2)
         run = p.add_run(f"{nombre}: ")
         run.bold = True
         run.font.size = Pt(TAM)
-        run = p.add_run("[Reflexión personal: aprendizaje, aporte al proyecto y dificultad principal. Redactar en primera persona.]")
-        run.italic = True
+        run = p.add_run(texto)
         run.font.size = Pt(TAM)
-        run.font.color.rgb = GRIS
 
     doc.add_heading("6.2 Declaración de uso de inteligencia artificial", level=2)
     parrafo(
